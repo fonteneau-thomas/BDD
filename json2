@@ -1,0 +1,13 @@
+import xmltodict
+import pprint
+import json
+
+with open('PrixCarburants_annuel_2018.xml') as fd:
+    doc = xmltodict.parse(fd.read())
+
+#pp = pprint.PrettyPrinter(indent=4)
+#pp.pprint(json.dumps(doc))
+
+with open("out2.json", "w") as out_file:
+    json.dump(doc, out_file, indent=2)
+
