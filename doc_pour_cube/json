@@ -1,0 +1,284 @@
+import json
+import csv
+import xmltodict
+import pprint
+import json
+import xml.etree.cElementTree as ET
+
+j = []
+
+
+from collections import OrderedDict
+
+tree = ET.parse('PrixCarburants_instantane.xml')
+root=tree.getroot()
+list=[]
+prix=[]
+ville=""
+jj=[]
+ad=""
+roww=OrderedDict()
+for station in root.findall("pdv"):
+  for e in station:
+    if e.tag == "horaires":
+      list.append(e.attrib)
+    if e.tag == "prix":
+      prix.append(e.attrib)
+    
+    if e.tag == "ville":
+      ville=e.text
+    if e.tag == "adresse":
+      ad=e.text
+    
+    del(e)
+  """print(ville)
+  print(prix)
+  print("----------------------------------------")"""
+  roww["Station"]={
+  "Ville": ville,
+  "Adresse station": ad,
+  "Prix": prix
+  }
+  jj.append(roww)
+  prix=[]
+  ville=""
+  del(station)
+  roww=OrderedDict()
+adresse=""
+ad1=""
+
+with open("stations-services-france.csv") as f:
+    reader = csv.DictReader(f, delimiter=";")
+    for row in reader:
+        # Add 'Shipping Details'  to row.
+        # Note that something like this will have to be done
+        # for *every* column you want to change.
+        row["Station"] = {
+          "Code_Station": row["Code"],
+          "Nom Station": row["Name"],
+          "Adresse station": row["Address"],
+          "Latitude": row["Latitude"],
+          "Longitude": row["Longitude"],
+          "Code postal": row["Zip"],
+          "Ville": row["City"],
+          "Marque": row["Brand"]}
+
+        # We don't need the 'Address' anymore.
+        del(row["Code"])
+        del(row["Name"])
+        del(row["Address"])
+        del(row["Latitude"])
+        del(row["Longitude"])
+        del(row["Zip"])
+        del(row["City"])
+        del(row["Brand"])
+
+        row["Paiement"] = {
+          "Visa": row["Visa"],
+          "Mastercard": row["Mastercard"],
+          "Amex": row["Amex"],
+          "Dinersclub": row["Dinersclub"],
+          "Eurotrafic": row["Eurotrafic"],
+          "GR Actys Eurotrafic": row["GR Actys Eurotrafic"],
+          "GR Netherlands": row["GR Netherlands"],
+          "Jubileo": row["Jubileo"],
+          "Bank Card": row["Bank Card"],
+          "DKV": row["DKV"],
+          "UTA": row["UTA"],
+          "Carte Club TOTAL": row["Carte Club TOTAL"]}
+
+        del(row["Visa"])
+        del(row["Mastercard"])
+        del(row["Amex"])
+        del(row["Dinersclub"])
+        del(row["Eurotrafic"])
+        del(row["GR Actys Eurotrafic"])
+        del(row["GR Netherlands"])
+        del(row["Jubileo"])
+        del(row["Bank Card"])
+        del(row["DKV"])
+        del(row["UTA"])
+        del(row["Carte Club TOTAL"])
+
+
+        row["Produit"] = {
+          "Super Ethanol e85": row["Super Ethanol e85"],
+          "sp95": row["sp95"],
+          "sp95 performance": row["sp95 performance"],
+          "sp95 e10": row["sp95 e10"],
+          "Optane Evolution 95": row["Optane Evolution 95"],
+          "sp98": row["sp98"],
+          "sp98 performance": row["sp98 performance"],
+          "Excellium 98": row["Excellium 98"],
+          "Optane Evolution 98": row["Optane Evolution 98"],
+          "Gasoil": row["Gasoil"],
+          "Diesel Excelan": row["Diesel Excelan"],
+          "Excellium diesel": row["Excellium diesel"],
+          "Diesel Evolution": row["Diesel Evolution"],
+          "Lpg": row["Lpg"],
+          "AdBlue": row["AdBlue"],
+          "GNR": row["GNR"],
+          "AVGAS 100 LL": row["AVGAS 100 LL"],
+          "Gas Bottled": row["Gas Bottled"],
+          "Fuel Automate": row["Fuel Automate"],
+          "Diesel Premier": row["Diesel Premier"],
+          "Gasoil Performance": row["Gasoil Performance"],
+          "Total Fioul Premier": row["Total Fioul Premier"],
+          "Tyre Pressure": row["Tyre Pressure"]}
+
+        del(row["Super Ethanol e85"])
+        del(row["sp95"])
+        del(row["sp95 performance"])
+        del(row["sp95 e10"])
+        del(row["Optane Evolution 95"])
+        del(row["sp98"])
+        del(row["sp98 performance"])
+        del(row["Excellium 98"])
+        del(row["Optane Evolution 98"])
+        del(row["Gasoil"])
+        del(row["Diesel Excelan"])
+        del(row["Excellium diesel"])
+        del(row["Diesel Evolution"])
+        del(row["Lpg"])
+        del(row["AdBlue"])
+        del(row["GNR"])
+        del(row["AVGAS 100 LL"])
+        del(row["Gas Bottled"])
+        del(row["Fuel Automate"])
+        del(row["Diesel Premier"])
+        del(row["Gasoil Performance"])
+        del(row["Total Fioul Premier"])
+        del(row["Tyre Pressure"])
+
+
+        row["Service Offert"] = {
+          "Shop": row["Shop"],
+          "Coffee Corner": row["Coffee Corner"],
+          "Bakerie": row["Bakerie"],
+          "Sandwitcherie": row["Sandwitcherie"],
+          "BDGrill": row["BDGrill"],
+          "Crocade": row["Crocade"],
+          "Baby Kit": row["Baby Kit"],
+          "Car Wash": row["Car Wash"],
+          "Car Wash HP": row["Car Wash HP"],
+          "Car Maintenance": row["Car Maintenance"],
+          "Tyre Center": row["Tyre Center"],
+          "Truck Station": row["Truck Station"],
+          "Vacuum": row["Vacuum"],
+          "Highway": row["Highway"],
+          "FreeWifi": row["FreeWifi"],
+          "Car Wash Lotus": row["Car Wash Lotus"],
+          "Car Wash Osmos": row["Car Wash Osmos"]}
+
+        del(row["Shop"])
+        del(row["Coffee Corner"])
+        del(row["Bakerie"])
+        del(row["Sandwitcherie"])
+        del(row["BDGrill"])
+        del(row["Crocade"])
+        del(row["Baby Kit"])
+        del(row["Car Wash"])
+        del(row["Car Wash HP"])
+        del(row["Car Maintenance"])
+        del(row["Tyre Center"])
+        del(row["Truck Station"])
+        del(row["Vacuum"])
+        del(row["Highway"])
+        del(row["FreeWifi"])
+        del(row["Car Wash Lotus"])
+        del(row["Car Wash Osmos"])
+
+       
+        for elem,tr in row.items():
+          #if elem =="Adresse station":
+          if elem=="Station":
+            for el,ad in tr.items():
+              if el=="Adresse station":
+                ad1=ad
+                break
+        boo=False
+        for rowa in jj:
+          for el,th in rowa.items():
+            for e,a in th.items():
+              if e=="Prix":
+                temppp=a
+              if e =="Adresse station":
+                adressee=a#adreese
+                if ad1==adressee:
+                  boo=True
+                  for el in temppp:
+                    for e,az in el.items():
+                      #print(e)
+                      if e=="valeur":
+                        #print(az)
+                        float(az)
+                  row["Prix"]={"Prix":temppp}
+        if boo==False:
+          row["Prix"]={"Prix":[]}
+        # Collect the changed row in the list of rows.
+        j.append(row)
+#print(json.dumps(j))
+
+with open("out_final.json", "w") as out_file:
+    json.dump(j, out_file, indent=2)
+
+"""Code
+Brand
+Name
+Address
+Zip
+City
+Latitude
+Longitude
+Visa
+Mastercard
+Amex
+Dinersclub
+Eurotrafic
+GR Actys Eurotrafic
+GR Netherlands
+Jubileo
+Bank Card
+DKV
+UTA
+Carte Club TOTAL
+Super Ethanol e85
+sp95
+sp95 performance
+sp95 e10
+Optane Evolution 95
+sp98
+sp98 performance
+Excellium 98
+Optane Evolution 98
+Gasoil
+Diesel Excelan
+Excellium diesel
+Diesel Evolution
+Lpg
+AdBlue
+GNR
+AVGAS 100 LL
+Gas Bottled
+Fuel Automate
+Shop
+Coffee Corner
+Bakerie
+Sandwitcherie
+BDGrill
+Crocade
+Baby Kit
+Car Wash
+Car Wash HP
+Car Maintenance
+Tyre Center
+Truck Station
+Vacuum
+Diesel Premier
+Gasoil Performance
+Total Fioul Premier
+Highway
+FreeWifi
+Car Wash Lotus
+Car Wash Osmos
+Tyre Pressure"""
